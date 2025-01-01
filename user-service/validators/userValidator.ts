@@ -26,3 +26,23 @@ export const createUserValidator = (req: any, _: Response, next: NextFunction) =
 
     next();
 };
+
+export const updateUserValidator = (req: any, _: Response, next: NextFunction) => {
+    const { name, phone, address } = req.body;
+    const nameRegex = /^[a-zA-Z\s]+$/;
+    const phoneRegex = /^\+?[1-9]\d{1,14}$/;
+
+    if (!name || !nameRegex.test(name)) {
+        return next(new statusError(400, 'Invalid name: only alphabetic characters and spaces are allowed.'));
+    }
+
+    if (phone && !phoneRegex.test(phone)) {
+        return next(new statusError(400, 'Invalid phone number: must follow E.164 format.'));
+    }
+
+    if (!address) {
+        return next(new statusError(400, 'Address is required.'));
+    }
+
+    next();
+};

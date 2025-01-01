@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express';
-import { createUserService, loginUser, sendOtpEmail, verifyUserOtp } from '../services/userService';
+import { createUserService, loginUser, sendOtpEmail, updateUserService, verifyUserOtp } from '../services/userService';
 import { AuthenticatedRequest } from '../interfaces/requestInterface';
 import { successResponse } from '../utils/response';
 
@@ -29,4 +29,15 @@ export const loginUserController = async (req: any, res: Response, next: NextFun
     const { email, password } = req.body;
     const user = await loginUser(email, password);
     res.status(200).json(successResponse(true, 'User logged in successfully', user));
+};
+
+export const getUserController = async (req: any, res: Response, next: NextFunction) => {
+    const user = req.user;
+    res.status(200).json(successResponse(true, 'User fetched successfully', user));
+};
+
+export const updateUserController = async (req: any, res: Response, next: NextFunction) => {
+    const { name, phone, address } = req.body;
+    const user = await updateUserService(req.user.id, name, phone, address);
+    res.status(200).json(successResponse(true, 'User updated successfully', user));
 };

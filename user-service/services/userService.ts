@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { createUser, findUserByEmail, verifyUser } from '../database/models/userModel';
+import { createUser, findUserByEmail, getUserById, updateUser, verifyUser } from '../database/models/userModel';
 import { statusError } from '../utils/statusError';
 import { generateOTP } from '../utils/otpGen';
 import { sendEmail } from '../utils/mail';
@@ -59,4 +59,12 @@ export const loginUser = async (email: string, password: string) => {
     }
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET!, { expiresIn: '1h' });
     return { user_id: user.id, token };
+};
+
+export const updateUserService = async (id: string, name: string, phone: string, address: string) => {
+    const user = await updateUser(id, name, phone, address);
+    if (!user) {
+        throw new statusError(404, 'User not found');
+    }
+    return user;
 };
