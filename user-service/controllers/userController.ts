@@ -1,5 +1,5 @@
-import { NextFunction, Response } from 'express';
-import { createUserService, loginUser, resetPasswordService, sendOtpEmail, updateUserService, verifyUserOtp } from '../services/userService';
+import e, { NextFunction, Response } from 'express';
+import { createUserService, loginUser, resetPasswordService, sendOtpEmail, updatePasswordService, updateUserService, verifyUserOtp } from '../services/userService';
 import { AuthenticatedRequest } from '../interfaces/requestInterface';
 import { successResponse } from '../utils/response';
 
@@ -46,4 +46,10 @@ export const resetPasswordController = async (req: any, res: Response, next: Nex
     const { oldPassword, newPassword } = req.body;
     const user = await resetPasswordService(req.user, oldPassword, newPassword);
     res.status(200).json(successResponse(true, 'Password reset successfully', user));
+};
+
+export const forgotPasswordController = async (req: any, res: Response, next: NextFunction) => {
+    const { email, password, otp } = req.body;
+    const user = await updatePasswordService(email, password, otp);
+    res.status(200).json(successResponse(true, 'Password updated successfully', user));
 };

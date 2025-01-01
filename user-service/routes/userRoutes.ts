@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { createUserController, getUserController, loginUserController, resetPasswordController, sendOtpController, updateUserController, verifyUserController } from '../controllers/userController';
+import { createUserController, forgotPasswordController, getUserController, loginUserController, resetPasswordController, sendOtpController, updateUserController, verifyUserController } from '../controllers/userController';
 import { authenticateToken } from '../middlewares/authenticationMiddleware';
-import { resetPasswordValidator, updateUserValidator } from '../validators/userValidator';
+import { forgotPasswordValidator, resetPasswordValidator, updateUserValidator } from '../validators/userValidator';
 
 const router = Router();
 
@@ -12,4 +12,5 @@ router.post('/login', loginUserController);
 router.get('/', authenticateToken, getUserController);
 router.put('/', authenticateToken, updateUserValidator, updateUserController);
 router.put('/reset-password', authenticateToken, resetPasswordValidator, resetPasswordController);
+router.put('/forgot-password', forgotPasswordValidator, forgotPasswordController);
 export default router;

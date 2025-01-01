@@ -58,3 +58,15 @@ export const resetPasswordValidator = (req: any, _: Response, next: NextFunction
     }
     next();
 };
+
+export const forgotPasswordValidator = (req: any, _: Response, next: NextFunction) => {
+    const { email, password, otp } = req.body;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!email || !password || !otp) {
+        return next(new statusError(400, 'Email, password, and OTP are required.'));
+    }
+    if (!passwordRegex.test(password)) {
+        return next(new statusError(400, 'Invalid password: must be at least 8 characters long, include uppercase, lowercase, a number, and a special character.'));
+    }
+    next();
+};

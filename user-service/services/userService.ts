@@ -80,3 +80,20 @@ export const resetPasswordService = async (user: User, oldPassword: string, newP
     const userData = await resetPassword(user.id.toString(), hashedPassword);
     return userData;
 };
+
+
+export const updatePasswordService = async (email: string, password: string, otp: string) => {
+    
+
+    const userOtp = await getOTP(email);
+    if (!userOtp) {
+        throw new statusError(404, 'OTP not found');
+    }
+    if (userOtp !== otp) {
+        throw new statusError(401, 'Invalid OTP');
+    }
+     deleteOTP(email);
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await resetPassword(email, hashedPassword);
+    return user;
+};
