@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express';
-import { createUserService } from '../services/userService';
+import { createUserService, sendOtpEmail, verifyUserOtp } from '../services/userService';
 import { AuthenticatedRequest } from '../interfaces/requestInterface';
 import { successResponse } from '../utils/response';
 
@@ -12,4 +12,16 @@ export const createUserController = async (req: any, res: Response, next: NextFu
     } catch (error: any) {
         next(error);
     }
+};
+
+export const verifyUserController = async (req: any, res: Response, next: NextFunction) => {
+    const { email, otp } = req.body;
+    await verifyUserOtp(email, otp);
+    res.status(200).json(successResponse(true, 'User verified successfully', null));
+};
+
+export const sendOtpController = async (req: any, res: Response, next: NextFunction) => {
+    const { email } = req.body;
+    await sendOtpEmail(email);
+    res.status(200).json(successResponse(true, 'OTP sent successfully', null));
 };
