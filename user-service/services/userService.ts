@@ -1,9 +1,12 @@
 import bcrypt from 'bcrypt';
-import { createUser, verifyUser } from '../database/models/userModel';
+import { createUser, findUserByEmail, verifyUser } from '../database/models/userModel';
 import { statusError } from '../utils/statusError';
 import { generateOTP } from '../utils/otpGen';
 import { sendEmail } from '../utils/mail';
 import { deleteOTP, getOTP, setOTP } from '../redis/redisClient';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+dotenv.config();
 
 export const createUserService = async (name: string, email: string, password: string, phone?: string, address?: string) => {
  
@@ -38,3 +41,22 @@ export const sendOtpEmail = async (email: string) => {
     sendEmail(email, 'OTP Verification', `Your OTP is ${otp}`);
 };
 
+export const loginUser = async (email: string, password: string) => {
+
+    if(!email || !password) {
+        throw new statusError(400, 'Email and password are required');
+    }
+    const user = await findUserByEmail(email);
+    if (!user) {
+        throw new statusError(404, 'User not found');
+    }
+    if (!user.is_verified) {
+        throw new statusError(401, 'User not verified');
+    }
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+        throw new statusError(401, 'Invalid password');
+    }
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET!, { expiresIn: '1h' });
+    return { user_id: user.id, token };
+};

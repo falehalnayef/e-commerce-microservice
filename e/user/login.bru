@@ -1,18 +1,18 @@
 meta {
-  name: register
+  name: login
   type: http
-  seq: 1
+  seq: 4
 }
 
 post {
-  url: 127.0.0.1:3001/users
+  url: 127.0.0.1:3001/users/send-otp
   body: json
   auth: none
 }
 
 body:json {
-  {"name":"faleh",
+  {
    "email":"sfs@ga.com",
-   "password":"342qrefqf"
+    "password":"fsdf"
   }
 }

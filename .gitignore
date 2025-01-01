@@ -4,3 +4,7 @@
 /gateway/node_modules
 /node_modules
 .env
+user-service/.env
+order-service/.env
+product-service/.env
+gateway/.env

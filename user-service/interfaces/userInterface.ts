@@ -2,7 +2,7 @@ export interface User {
     id: number;
     name: string;
     email: string;
-    password_hash: string;
+    password: string;
     phone?: string;
     address?: string;
     is_verified: boolean;
