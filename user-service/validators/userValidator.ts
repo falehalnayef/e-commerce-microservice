@@ -46,3 +46,15 @@ export const updateUserValidator = (req: any, _: Response, next: NextFunction) =
 
     next();
 };
+
+export const resetPasswordValidator = (req: any, _: Response, next: NextFunction) => {
+    const { oldPassword, newPassword } = req.body;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!oldPassword || !newPassword) {
+        return next(new statusError(400, 'Old password and new password are required.'));
+    }
+    if (!passwordRegex.test(newPassword)) {
+        return next(new statusError(400, 'Invalid password: must be at least 8 characters long, include uppercase, lowercase, a number, and a special character.'));
+    }
+    next();
+};

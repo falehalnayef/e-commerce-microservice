@@ -37,3 +37,10 @@ export const updateUser = async (id: string, name: string,phone: string, address
     const result = await pool.query(query, values);
     return result.rows[0] || null;
 };
+
+export const resetPassword = async (userId: string, password: string) => {
+    const query = `UPDATE users SET password = $1 WHERE id = $2 RETURNING *`;
+    const values = [password, userId];
+    const result = await pool.query(query, values);
+    return result.rows[0] || null;
+};

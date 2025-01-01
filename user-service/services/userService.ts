@@ -1,11 +1,12 @@
 import bcrypt from 'bcrypt';
-import { createUser, findUserByEmail, getUserById, updateUser, verifyUser } from '../database/models/userModel';
+import { createUser, findUserByEmail, getUserById, resetPassword, updateUser, verifyUser } from '../database/models/userModel';
 import { statusError } from '../utils/statusError';
 import { generateOTP } from '../utils/otpGen';
 import { sendEmail } from '../utils/mail';
 import { deleteOTP, getOTP, setOTP } from '../redis/redisClient';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { User } from '../interfaces/userInterface';
 dotenv.config();
 
 export const createUserService = async (name: string, email: string, password: string, phone?: string, address?: string) => {
@@ -67,4 +68,15 @@ export const updateUserService = async (id: string, name: string, phone: string,
         throw new statusError(404, 'User not found');
     }
     return user;
+};
+
+export const resetPasswordService = async (user: User, oldPassword: string, newPassword: string) => {
+   
+    const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+    if (!isPasswordValid) {
+        throw new statusError(401, 'Invalid password');
+    }
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const userData = await resetPassword(user.id.toString(), hashedPassword);
+    return userData;
 };
