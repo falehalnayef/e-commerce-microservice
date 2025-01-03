@@ -5,7 +5,7 @@ import pool from '../db';
 export const createUser = async (name: string, email: string, password: string, phone?: string, address?: string) => {
     const query = `
         INSERT INTO users (name, email, password, phone, address) 
-        VALUES ($1, $2, $3, $4, $5) RETURNING id email;
+        VALUES ($1, $2, $3, $4, $5) RETURNING email;
     `;
     const values = [name, email, password, phone, address];
     const result = await pool.query(query, values);

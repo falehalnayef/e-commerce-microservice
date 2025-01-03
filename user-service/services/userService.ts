@@ -43,7 +43,6 @@ export const sendOtpEmail = async (email: string) => {
 };
 
 export const loginUser = async (email: string, password: string) => {
-
     if(!email || !password) {
         throw new statusError(400, 'Email and password are required');
     }

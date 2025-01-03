@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import { createUserController, forgotPasswordController, getUserController, loginUserController, resetPasswordController, sendOtpController, updateUserController, verifyUserController } from '../controllers/userController';
 import { authenticateToken } from '../middlewares/authenticationMiddleware';
-import { forgotPasswordValidator, resetPasswordValidator, updateUserValidator } from '../validators/userValidator';
+import { createUserValidator, forgotPasswordValidator, resetPasswordValidator, updateUserValidator } from '../validators/userValidator';
 
 const router = Router();
 
-router.post('/', createUserController);
+router.post('/', createUserValidator, createUserController);
 router.post('/verify', verifyUserController);
 router.post('/send-otp', sendOtpController);
 router.post('/login', loginUserController);

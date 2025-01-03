@@ -3,7 +3,7 @@ import initializeDatabase from "./database/scripts/createTables";
 
 const PORT = process.env.PORT || 3001;
 
-app.listen(PORT, async () => {
+const server = app.listen(PORT, async () => {
 
     try {
         await initializeDatabase();
@@ -14,3 +14,4 @@ app.listen(PORT, async () => {
     
   });
   
+export default server;
