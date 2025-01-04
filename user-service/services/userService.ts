@@ -92,7 +92,11 @@ export const updatePasswordService = async (email: string, password: string, otp
         throw new statusError(401, 'Invalid OTP');
     }
      deleteOTP(email);
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await resetPassword(email, hashedPassword);
-    return user;
+    const hashedPassword = bcrypt.hash(password, 10);
+    const user = await findUserByEmail(email);
+    if (!user) {
+        throw new statusError(404, 'User not found');
+    }
+    await resetPassword(user.id.toString(), await hashedPassword);
+    return null;
 };

@@ -47,7 +47,8 @@ export const loginUserController = async (req: any, res: Response, next: NextFun
 
 export const getUserController = async (req: any, res: Response, next: NextFunction) => {
     try {
-        const user = req.user;
+        let user = req.user;
+        user.password = undefined;
         res.status(200).json(successResponse(true, 'User fetched successfully', user));
     } catch (error: any) {
         next(error);
@@ -65,9 +66,13 @@ export const updateUserController = async (req: any, res: Response, next: NextFu
 };
 
 export const resetPasswordController = async (req: any, res: Response, next: NextFunction) => {
+   try {
     const { oldPassword, newPassword } = req.body;
-    const user = await resetPasswordService(req.user, oldPassword, newPassword);
-    res.status(200).json(successResponse(true, 'Password reset successfully', user));
+     await resetPasswordService(req.user, oldPassword, newPassword);
+    res.status(200).json(successResponse(true, 'Password reset successfully', null));
+   } catch (error: any) {
+    next(error);
+   }
 };
 
 export const forgotPasswordController = async (req: any, res: Response, next: NextFunction) => {

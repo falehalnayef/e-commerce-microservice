@@ -26,13 +26,13 @@ export const verifyUser = async (email: string) => {
 };
 
 export const getUserById = async (id: string): Promise<User | null> => {
-    const query = `SELECT * FROM users WHERE id = $1`;
+    const query = `SELECT id, name, email, phone, address, password FROM users WHERE id = $1`;
     const result = await pool.query(query, [id]);
     return result.rows[0] || null;
 };
 
 export const updateUser = async (id: string, name: string,phone: string, address: string): Promise<User | null> => {
-    const query = `UPDATE users SET name = $1, phone = $2, address = $3 WHERE id = $4 RETURNING *`;
+    const query = `UPDATE users SET name = $1, phone = $2, address = $3 WHERE id = $4 RETURNING id, name, email, phone, address`;
     const values = [name, phone, address, id];
     const result = await pool.query(query, values);
     return result.rows[0] || null;
