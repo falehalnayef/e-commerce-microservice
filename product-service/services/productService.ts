@@ -26,3 +26,11 @@ export const updateProduct = async (id: string, product: IProduct) => {
     }
     return updatedProduct;
 };
+
+export const deleteProduct = async (id: string) => {
+    const deletedProduct = await ProductModel.findByIdAndDelete(id);
+    if (!deletedProduct) {
+        throw new Error("Product not found");
+    }
+    return deletedProduct;
+};
