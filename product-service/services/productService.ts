@@ -5,3 +5,8 @@ export const addProduct = async (product: IProduct) => {
     await newProduct.save();
     return newProduct;
 };
+
+export const getProducts = async () => {
+    const products = await ProductModel.find();
+    return products;
+};
