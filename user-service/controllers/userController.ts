@@ -1,6 +1,5 @@
 import e, { NextFunction, Response } from 'express';
 import { createUserService, loginUser, resetPasswordService, sendOtpEmail, updatePasswordService, updateUserService, verifyUserOtp } from '../services/userService';
-import { AuthenticatedRequest } from '../interfaces/requestInterface';
 import { successResponse } from '../utils/response';
 
 export const createUserController = async (req: any, res: Response, next: NextFunction) => {

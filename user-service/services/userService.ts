@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { createUser, findUserByEmail, getUserById, resetPassword, updateUser, verifyUser } from '../database/models/userModel';
+import { createUser, findUserByEmail, resetPassword, updateUser, verifyUser } from '../database/models/userModel';
 import { statusError } from '../utils/statusError';
 import { generateOTP } from '../utils/otpGen';
 import { sendEmail } from '../utils/mail';
