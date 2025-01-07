@@ -2,6 +2,7 @@
 /order-service/node_modules
 /product-service/node_modules
 /gateway/node_modules
+/user-service/uploads
 /node_modules
 .env
 user-service/.env

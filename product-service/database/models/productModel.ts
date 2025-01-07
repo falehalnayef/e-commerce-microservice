@@ -18,7 +18,7 @@ const ProductSchema: Schema = new Schema({
   price: { type: Number, required: true },
   category: { type: String, required: true },
   stock: { type: Number, default: 0 },
-  images: { type: [String], default: [] },
+  photo: { type: [String], default: [] },
   discount: { type: Number, default: null },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },

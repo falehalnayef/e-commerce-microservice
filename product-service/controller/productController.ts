@@ -4,15 +4,17 @@ import { successResponse } from "../utils/response";
 
 export const addProductController = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const product = req.body;
-        const newProduct = await addProduct(product);
-        res.status(201).json(successResponse(true, "Product added successfully", newProduct));
+        const productData = req.body;
+        const photoPath = req.file?.path;
+        const product = await addProduct({ ...productData, photo: photoPath });
+         await addProduct(product);
+        res.status(201).json(successResponse(true, "Product added successfully", null));
     } catch (error) {
         next(error);
-    }
+    }   
 };
 
-export const getProductsController = async (req: Request, res: Response, next: NextFunction) => {
+export const getProductsController = async (_req: Request, res: Response, next: NextFunction) => {
     try {
         const products = await getProducts();
         res.status(200).json(successResponse(true, "Products fetched successfully", products));
@@ -32,7 +34,9 @@ export const getProductByIdController = async (req: Request, res: Response, next
 
 export const updateProductController = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const product = await updateProduct(req.params.id, req.body);
+        const productData = req.body;
+        const photoPath = req.file?.path;
+        const product = await updateProduct(req.params.id, { ...productData, photo: photoPath });
         res.status(200).json(successResponse(true, "Product updated successfully", product));
     } catch (error) {
         next(error);
@@ -41,8 +45,8 @@ export const updateProductController = async (req: Request, res: Response, next:
 
 export const deleteProductController = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const product = await deleteProduct(req.params.id);
-        res.status(200).json(successResponse(true, "Product deleted successfully", product));
+         await deleteProduct(req.params.id);
+        res.status(200).json(successResponse(true, "Product deleted successfully", null));
     } catch (error) {
         next(error);
     }

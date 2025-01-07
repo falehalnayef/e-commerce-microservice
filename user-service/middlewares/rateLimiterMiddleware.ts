@@ -8,7 +8,7 @@ export const rateLimiter = rateLimit({
         sendCommand: async (...args) => redisClient.sendCommand(args),
     }),
     windowMs: 60 * 1000,
-    max: 100, 
+    max: 16, 
     message: {
         error: 'Too many login attempts. Please try again after a minute.',
     },
