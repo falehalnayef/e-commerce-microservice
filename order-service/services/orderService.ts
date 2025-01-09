@@ -24,3 +24,8 @@ export const updateOrderService = async (orderId: string, order: any) => {
     const updatedOrder = await orderModel.findByIdAndUpdate(orderId, order);
     return updatedOrder;
 };
+
+export const deleteOrderService = async (orderId: string) => {
+    const deletedOrder = await orderModel.findByIdAndDelete(orderId);
+    return deletedOrder;
+};
