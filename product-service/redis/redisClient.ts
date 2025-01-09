@@ -13,15 +13,15 @@ redisClient.on('error', (err: any) => console.error('Redis Client Error', err));
     await redisClient.connect();
 })();
 
-export const setOTP = async (key: string, otp: string, ttl: number) => {
-    await redisClient.set(key, otp, { EX: ttl });
+export const setData = async (key: string, value: string, ttl: number) => {
+    await redisClient.set(key, value, { EX: ttl });
 };
 
-export const getOTP = async (key: string): Promise<string | null> => {
+export const getData = async (key: string): Promise<string | null> => {
     return await redisClient.get(key);
 };
 
-export const deleteOTP = async (key: string) => {
+export const deleteData = async (key: string) => {
     await redisClient.del(key);
 };
 

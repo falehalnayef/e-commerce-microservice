@@ -3,7 +3,7 @@ import { createUser, findUserByEmail, resetPassword, updateUser, verifyUser } fr
 import { statusError } from '../utils/statusError';
 import { generateOTP } from '../utils/otpGen';
 import { sendEmail } from '../utils/mail';
-import { deleteOTP, getOTP, setOTP } from '../redis/redisClient';
+import { deleteData, getData, setData } from '../redis/redisClient';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { User } from '../interfaces/userInterface';
@@ -14,7 +14,7 @@ export const createUserService = async (name: string, email: string, password: s
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await createUser(name, email, hashedPassword, phone, address);
     const otp = generateOTP();
-    await setOTP(user.email, otp, 60);
+    await setData(user.email, otp, 60);
     sendEmail(email, 'OTP Verification', `Your OTP is ${otp}`);
 };
 
@@ -22,14 +22,14 @@ export const verifyUserOtp = async (email: string, otp: string) => {
     if(!email || !otp) {
         throw new statusError(400, 'Email and OTP are required');
     }
-    const userOtp = await getOTP(email);
+    const userOtp = await getData(email);
     if (!userOtp) {
         throw new statusError(404, 'OTP not found');
     }
     if (userOtp !== otp) {
         throw new statusError(401, 'Invalid OTP');
     }
-    await deleteOTP(email);
+    await deleteData(email);
     await verifyUser(email);
 };
 
@@ -38,12 +38,16 @@ export const sendOtpEmail = async (email: string) => {
         throw new statusError(400, 'Email is required');
     }
     const otp = generateOTP();
-    await setOTP(email, otp, 60);
+    const user = await findUserByEmail(email);
+    if (!user) {
+        throw new statusError(404, 'User not found');
+    }
+    await setData(email, otp, 60);
     sendEmail(email, 'OTP Verification', `Your OTP is ${otp}`);
 };
 
 export const loginUser = async (email: string, password: string) => {
-    if(!email || !password) {
+    if(!email || !password) {128558
         throw new statusError(400, 'Email and password are required');
     }
     const user = await findUserByEmail(email);
@@ -84,14 +88,14 @@ export const resetPasswordService = async (user: User, oldPassword: string, newP
 export const updatePasswordService = async (email: string, password: string, otp: string) => {
     
 
-    const userOtp = await getOTP(email);
+    const userOtp = await getData(email);
     if (!userOtp) {
         throw new statusError(404, 'OTP not found');
     }
     if (userOtp !== otp) {
         throw new statusError(401, 'Invalid OTP');
     }
-     deleteOTP(email);
+     deleteData(email);
     const hashedPassword = bcrypt.hash(password, 10);
     const user = await findUserByEmail(email);
     if (!user) {

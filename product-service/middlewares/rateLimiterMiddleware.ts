@@ -10,7 +10,7 @@ export const rateLimiter = rateLimit({
     windowMs: 60 * 1000,
     max: 10, 
     message: {
-        error: 'Too many login attempts. Please try again after a minute.',
+        error: 'Too many attempts. Please try again after a minute.',
     },
     standardHeaders: true,
     legacyHeaders: false,

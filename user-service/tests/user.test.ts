@@ -2,7 +2,7 @@ import server from "../server";
 import request from "supertest";
 import db from "../database/db";
 import redisClient from "../redis/redisClient";
-import { getOTP } from "../redis/redisClient";
+import { getData } from "../redis/redisClient";
 describe("User API", () => {
 
     beforeAll(async () => {
@@ -76,7 +76,7 @@ describe("User API", () => {
 
     it("should verify user otp", async () => {
 
-        const otp = await getOTP(email)
+        const otp = await getData(email)
         expect(otp).not.toBeNull();
         const response = await request(server).post("/users/verify").send({
             email,
@@ -146,7 +146,7 @@ describe("User API", () => {
     });
 
     it("should reset password with forgot password", async () => {
-        const otp = await getOTP(email)
+        const otp = await getData(email)
         expect(otp).not.toBeNull();
         const response = await request(server).put("/users/forgot-password").send({
             email,
