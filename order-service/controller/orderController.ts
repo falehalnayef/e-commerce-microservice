@@ -1,4 +1,4 @@
-import { createOrderService, getOrdersByProductIdService, getOrdersByUserIdService } from "../services/orderService";
+import { createOrderService, getOrderByOrderIdService, getOrdersByProductIdService, getOrdersByUserIdService, updateOrderService } from "../services/orderService";
 import { successResponse } from "../utils/response";
 
 export const createOrderController = async (req: any, res: any, next: any) => {
@@ -27,3 +27,22 @@ export const getOrdersByUserIdController = async (req: any, res: any, next: any)
         next(error);
     }
 };
+
+export const getOrderByOrderIdController = async (req: any, res: any, next: any) => {
+    try {
+        const order = await getOrderByOrderIdService(req.params.orderId);
+        return res.status(200).json(successResponse(true, "Order fetched successfully", order));
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const updateOrderController = async (req: any, res: any, next: any) => {
+    try {
+        const order = await updateOrderService(req.params.orderId, req.body);
+        return res.status(200).json(successResponse(true, "Order updated successfully", order));
+    } catch (error) {
+        next(error);
+    }
+};
+
