@@ -3,10 +3,10 @@ import { createOrderController, deleteOrderController, getOrderByOrderIdControll
 
 const router = Router();
 
-router.post("/order", createOrderController);
-router.get("/order/product/:productId", getOrdersByProductIdController);
-router.get("/order/user/:userId", getOrdersByUserIdController);
-router.get("/order/:orderId", getOrderByOrderIdController);
-router.put("/order/:orderId", updateOrderController);
-router.delete("/order/:orderId", deleteOrderController);
+router.post("/", createOrderController);
+router.get("/product/:productId", getOrdersByProductIdController);
+router.get("/user/:userId", getOrdersByUserIdController);
+router.get("/:orderId", getOrderByOrderIdController);
+router.put("/:orderId", updateOrderController);
+router.delete("/:orderId", deleteOrderController);
 export default router;
