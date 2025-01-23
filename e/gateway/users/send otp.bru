@@ -1,0 +1,17 @@
+meta {
+  name: send otp
+  type: http
+  seq: 3
+}
+
+post {
+  url: 127.0.0.1:3000/gateway/users/send-otp
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+   "email":"sfs@ga.com"
+  }
+}

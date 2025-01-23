@@ -1,0 +1,18 @@
+meta {
+  name: get Orders by users
+  type: http
+  seq: 9
+}
+
+get {
+  url: 127.0.0.1:3003/orders/user/677d44b61f982fc196a8a4f8
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+   "email":"sfs@ga.com",
+   "otp":"342qrefqf"
+  }
+}

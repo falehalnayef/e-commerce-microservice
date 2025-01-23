@@ -1,0 +1,18 @@
+meta {
+  name: login
+  type: http
+  seq: 4
+}
+
+post {
+  url: 127.0.0.1:3000/gateway/users/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+   "email":"cssds@gmail.com",
+    "password":"Abcd@1234"
+  }
+}

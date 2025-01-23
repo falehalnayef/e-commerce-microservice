@@ -1,0 +1,23 @@
+meta {
+  name: delete order
+  type: http
+  seq: 6
+}
+
+delete {
+  url: 127.0.0.1:3003/orders/6782775dd62a1b9722b3751f
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: 
+}
+
+body:json {
+  {
+    "name":"faleh",
+    "phone":908342234,
+    "address":"masaken barzah"
+  }
+}

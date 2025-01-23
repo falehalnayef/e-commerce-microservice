@@ -1,0 +1,28 @@
+meta {
+  name: add order
+  type: http
+  seq: 1
+}
+
+post {
+  url: 127.0.0.1:3003/orders
+  body: json
+  auth: none
+}
+
+body:json {
+  {"user_id":"677d44b61f982fc196a8a4f8",
+   "total":100,
+   "items":[{
+        "product_id": "677d44b61f982fc196a8a4f8",
+  "quantity":1,
+     "price":100
+   },
+            {
+        "product_id": "677d44b61f982fc196a8a4f8",
+  "quantity":1,
+     "price":100
+   }
+   ]
+  }
+}

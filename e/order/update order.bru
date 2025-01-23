@@ -1,0 +1,18 @@
+meta {
+  name: update order
+  type: http
+  seq: 7
+}
+
+put {
+  url: 127.0.0.1:3003/orders/6782775dd62a1b9722b3751f
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+   "total":1000
+  
+  }
+}

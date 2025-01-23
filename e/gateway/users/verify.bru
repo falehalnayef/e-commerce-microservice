@@ -1,0 +1,18 @@
+meta {
+  name: verify
+  type: http
+  seq: 2
+}
+
+post {
+  url: 127.0.0.1:3000/gateway/users/verify
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+   "email":"sfs@ga.com",
+   "otp":"342qrefqf"
+  }
+}
