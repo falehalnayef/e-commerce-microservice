@@ -3,11 +3,13 @@ import request from "supertest";
 import db from "../database/db";
 import redisClient from "../redis/redisClient";
 import { getData } from "../redis/redisClient";
+import jwt from "jsonwebtoken";
 describe("User API", () => {
 
     beforeAll(async () => {
         await db.query("DELETE FROM users");
         await redisClient.flushAll();
+   
     });
 
     afterAll(async () => {
@@ -18,13 +20,17 @@ describe("User API", () => {
         server.close();
     });
 
+    const serToken = jwt.sign({ id: "na" }, process.env.JWT_COMM_SECRET || "default_secret", {
+        expiresIn: "5m",
+      });
+
     const email = "john.doe@example.com";
    const password = "Abcd@1234";
     let token = "1234567890";
    const userQuery = "SELECT * FROM users WHERE email = $1";
 
     it("should return 400 if the user is missing required fields", async () => {
-        const response = await request(server).post("/users").send({
+        const response = await request(server).post("/users").set("authorizationComm", serToken).send({
             email,
             password
         });
@@ -37,14 +43,14 @@ describe("User API", () => {
     });
 
     it("should fail to login with invalid credentials", async () => {
-        const response = await request(server).post("/users/login").send({
+        const response = await request(server).post("/users/login").set("authorizationComm", serToken).send({
             email,
             password
         });
         expect(response.status).toBe(404);
     });
     it("should create a user", async () => {
-        const response = await request(server).post("/users").send({
+        const response = await request(server).post("/users").set("authorizationComm", serToken).send({
             name: "John Doe",
             email,
             password
@@ -57,7 +63,7 @@ describe("User API", () => {
         expect(user.rows.length).toBe(1);
     });
     it("should fail to login with incorrect password", async () => {
-        const response = await request(server).post("/users/login").send({
+        const response = await request(server).post("/users/login").set("authorizationComm", serToken).send({
             email,
             password:"fdsafdsa"
         });
@@ -65,7 +71,7 @@ describe("User API", () => {
     });
 
     it("should fail to login with unverified user", async () => {
-        const response = await request(server).post("/users/login").send({
+        const response = await request(server).post("/users/login").set("authorizationComm", serToken).send({
             email,
             password,
         });
@@ -78,7 +84,7 @@ describe("User API", () => {
 
         const otp = await getData(email)
         expect(otp).not.toBeNull();
-        const response = await request(server).post("/users/verify").send({
+        const response = await request(server).post("/users/verify").set("authorizationComm", serToken).send({
             email,
             otp
         });
@@ -86,7 +92,7 @@ describe("User API", () => {
     });
 
     it("should login with verified user", async () => {
-        const response = await request(server).post("/users/login").send({
+        const response = await request(server).post("/users/login").set("authorizationComm", serToken).send({
             email,
             password
         });
@@ -95,13 +101,13 @@ describe("User API", () => {
     });
 
     it("should get user details", async () => {
-        const response = await request(server).get("/users").set("Authorization", token);
+        const response = await request(server).get("/users").set("authorizationComm", serToken).set("Authorization", token);
         expect(response.status).toBe(200);
         expect(response.body.data.email).toBe(email);
     });
 
     it("should update user details", async () => {
-        const response = await request(server).put("/users").set("Authorization", token).send({
+        const response = await request(server).put("/users").set("authorizationComm", serToken).set("Authorization", token).send({
             name: "John Doe",
             phone: "+1234567890",
             address: "1234567890"
@@ -114,7 +120,7 @@ describe("User API", () => {
 
     it("should reset password", async () => {
        
-        const response = await request(server).put("/users/reset-password").set("Authorization", token).send({
+        const response = await request(server).put("/users/reset-password").set("authorizationComm", serToken).set("Authorization", token).send({
             oldPassword: password,
             newPassword: "Abcd@12345"
         });
@@ -122,7 +128,7 @@ describe("User API", () => {
     });
 
     it("should fail to login with old password", async () => {
-        const response = await request(server).post("/users/login").send({
+        const response = await request(server).post("/users/login").set("authorizationComm", serToken).send({
             email,
             password
         });
@@ -130,7 +136,7 @@ describe("User API", () => {
     });
 
     it("should login with new password", async () => {
-        const response = await request(server).post("/users/login").send({
+        const response = await request(server).post("/users/login").set("authorizationComm", serToken).send({
             email,
             password: "Abcd@12345"
         });
@@ -139,7 +145,7 @@ describe("User API", () => {
     });
 
     it("should send otp to user email for forgot password fn", async () => {
-        const response = await request(server).post("/users/send-otp").send({
+        const response = await request(server).post("/users/send-otp").set("authorizationComm", serToken).send({
             email
         });
         expect(response.status).toBe(200);
@@ -148,7 +154,7 @@ describe("User API", () => {
     it("should reset password with forgot password", async () => {
         const otp = await getData(email)
         expect(otp).not.toBeNull();
-        const response = await request(server).put("/users/forgot-password").send({
+        const response = await request(server).put("/users/forgot-password").set("authorizationComm", serToken).send({
             email,
             password: "Abcd@12347",
             otp: otp
@@ -157,7 +163,7 @@ describe("User API", () => {
     });
 
     it("should fail to login with old password", async () => {
-        const response = await request(server).post("/users/login").send({
+        const response = await request(server).post("/users/login").set("authorizationComm", serToken).send({
             email,
             password: "Abcd@12345"
             });
@@ -165,7 +171,7 @@ describe("User API", () => {
     });
 
     it("should login with new password", async () => {
-        const response = await request(server).post("/users/login").send({
+        const response = await request(server).post("/users/login").set("authorizationComm", serToken).send({
             email,
             password: "Abcd@12347"
         });
