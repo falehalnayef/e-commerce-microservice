@@ -1,0 +1,33 @@
+meta {
+  name: add product
+  type: http
+  seq: 1
+}
+
+post {
+  url: 127.0.0.1:3000/gateway/products
+  body: multipartForm
+  auth: none
+}
+
+body:json {
+  {
+     "name": "string",
+    "description": "string",
+    "price": 3423,
+    "category": "string",
+    "stock": 42,
+    "images": "string[]",
+    "discount": 342
+  }
+}
+
+body:multipart-form {
+  name: fjdslakl
+  description: jfksld
+  price: 1000
+  category: dasa
+  stock: 1000
+  discount: 20
+  photo: @file(/home/faleh/icons/Dakirby309-Simply-Styled-OS-Linux.256.png)
+}

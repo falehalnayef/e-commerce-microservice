@@ -46,8 +46,12 @@ export const loginUserController = async (req: any, res: Response, next: NextFun
 
 export const getUserController = async (req: any, res: Response, next: NextFunction) => {
     try {
-        let user = req.user;
-        user.password = undefined;
+        let user = req.body.userData
+
+
+        delete user.password;
+
+        console.log(user)
         res.status(200).json(successResponse(true, 'User fetched successfully', user));
     } catch (error: any) {
         next(error);

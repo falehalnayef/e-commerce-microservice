@@ -1,0 +1,33 @@
+meta {
+  name: update product
+  type: http
+  seq: 5
+}
+
+put {
+  url: 127.0.0.1:3000/gateway/products
+  body: multipartForm
+  auth: none
+}
+
+body:json {
+  {
+     "name": "string",
+    "description": "string",
+    "price": 3423,
+    "category": "string",
+    "stock": 42,
+    "images": "string[]",
+    "discount": 342
+  }
+}
+
+body:multipart-form {
+  name: 
+  description: 
+  price: 
+  category: 
+  stock: 
+  photo: 
+  discount: 
+}
